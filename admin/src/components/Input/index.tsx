@@ -2,6 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import EmailEditor, { EditorRef, EmailEditorProps } from 'react-email-editor';
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  iframe {
+      min-width: 100% !important;
+  }
+`;
+
 const EmailEditorComponent = ({ onChange, value, name }: any) => {
   const emailEditorRef = useRef<EditorRef>(null);
 
@@ -25,12 +31,6 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
       }
     }
   };
-
-  const Wrapper = styled.div`
-    iframe {
-        min-width: 100% !important;
-    }
-  `;
 
   return (
     <Wrapper>
