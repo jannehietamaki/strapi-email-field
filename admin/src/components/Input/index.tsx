@@ -19,7 +19,10 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
     });
 
     if (value) {
-      unlayer.loadDesign(JSON.parse(value)?.design);
+      const d = JSON.parse(value);
+      if (d?.design) {
+        unlayer.loadDesign(d?.design);
+      }
     }
   };
 
