@@ -14,7 +14,7 @@ export default {
         defaultMessage: "Edit content",
       },
       components: {
-        Input: async () => import("./components/Input"),
+        Input: async () => import("./components/Input").then((m) => m.default),
       },
     });
 

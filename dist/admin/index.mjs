@@ -13,7 +13,7 @@ const index = {
         defaultMessage: "Edit content"
       },
       components: {
-        Input: async () => import("../_chunks/index-Dg3utlaw.mjs")
+        Input: async () => import("../_chunks/index-Dg3utlaw.mjs").then((m) => m.default)
       }
     });
     app.registerPlugin({
