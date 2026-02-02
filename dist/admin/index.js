@@ -14,7 +14,7 @@ const index = {
         defaultMessage: "Edit content"
       },
       components: {
-        Input: async () => Promise.resolve().then(() => require("../_chunks/index-CllrO4m-.js")).then((m) => m.default)
+        Input: async () => Promise.resolve().then(() => require("../_chunks/index-CllrO4m-.js"))
       }
     });
     app.registerPlugin({
