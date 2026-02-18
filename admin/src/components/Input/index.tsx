@@ -17,9 +17,14 @@ const getDesign = (val: any) => {
 const EmailEditorComponent = ({ onChange, value, name }: any) => {
   const emailEditorRef = useRef<EditorRef>(null);
   const unlayerRef = useRef<any>(null);
+  const isInternalChange = useRef(false);
 
-  // Handle value changes (e.g., locale switch)
+  // Handle external value changes (e.g., locale switch)
   useEffect(() => {
+    if (isInternalChange.current) {
+      isInternalChange.current = false;
+      return;
+    }
     const design = getDesign(value);
     if (unlayerRef.current && design) {
       unlayerRef.current.loadDesign(design);
@@ -32,6 +37,7 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
     unlayer.addEventListener("design:updated", () => {
       unlayer?.exportHtml((data: { design: object; html: string }) => {
         const { design, html } = data;
+        isInternalChange.current = true;
         onChange({
           target: {
             name,

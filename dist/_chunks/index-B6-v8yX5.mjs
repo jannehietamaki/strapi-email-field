@@ -1,13 +1,8 @@
-"use strict";
-Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const jsxRuntime = require("react/jsx-runtime");
-const react = require("react");
-const EmailEditor = require("react-email-editor");
-const styled = require("styled-components");
-const _interopDefault = (e) => e && e.__esModule ? e : { default: e };
-const EmailEditor__default = /* @__PURE__ */ _interopDefault(EmailEditor);
-const styled__default = /* @__PURE__ */ _interopDefault(styled);
-const Wrapper = styled__default.default.div`
+import { jsx } from "react/jsx-runtime";
+import { useRef, useEffect } from "react";
+import EmailEditor from "react-email-editor";
+import styled from "styled-components";
+const Wrapper = styled.div`
   iframe {
     min-width: 100% !important;
   }
@@ -18,9 +13,14 @@ const getDesign = (val) => {
   return d?.design || null;
 };
 const EmailEditorComponent = ({ onChange, value, name }) => {
-  const emailEditorRef = react.useRef(null);
-  const unlayerRef = react.useRef(null);
-  react.useEffect(() => {
+  const emailEditorRef = useRef(null);
+  const unlayerRef = useRef(null);
+  const isInternalChange = useRef(false);
+  useEffect(() => {
+    if (isInternalChange.current) {
+      isInternalChange.current = false;
+      return;
+    }
     const design = getDesign(value);
     if (unlayerRef.current && design) {
       unlayerRef.current.loadDesign(design);
@@ -31,6 +31,7 @@ const EmailEditorComponent = ({ onChange, value, name }) => {
     unlayer.addEventListener("design:updated", () => {
       unlayer?.exportHtml((data) => {
         const { design: design2, html } = data;
+        isInternalChange.current = true;
         onChange({
           target: {
             name,
@@ -44,8 +45,8 @@ const EmailEditorComponent = ({ onChange, value, name }) => {
       unlayer.loadDesign(design);
     }
   };
-  return /* @__PURE__ */ jsxRuntime.jsx(Wrapper, { children: /* @__PURE__ */ jsxRuntime.jsx(
-    EmailEditor__default.default,
+  return /* @__PURE__ */ jsx(Wrapper, { children: /* @__PURE__ */ jsx(
+    EmailEditor,
     {
       ref: emailEditorRef,
       onReady,
@@ -54,4 +55,6 @@ const EmailEditorComponent = ({ onChange, value, name }) => {
     }
   ) });
 };
-exports.default = EmailEditorComponent;
+export {
+  EmailEditorComponent as default
+};
