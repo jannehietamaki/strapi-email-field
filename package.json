@@ -1,6 +1,6 @@
 {
   "name": "strapi-email-field",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Email template editor custom field for Strapi",
   "strapi": {
     "name": "strapi-email-field",
