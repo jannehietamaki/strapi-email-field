@@ -17,16 +17,14 @@ const getDesign = (val: any) => {
 const EmailEditorComponent = ({ onChange, value, name }: any) => {
   const emailEditorRef = useRef<EditorRef>(null);
   const unlayerRef = useRef<any>(null);
-  const isInternalChange = useRef(false);
+  const lastInternalDesign = useRef<string | null>(null);
 
   // Handle external value changes (e.g., locale switch)
   useEffect(() => {
-    if (isInternalChange.current) {
-      isInternalChange.current = false;
-      return;
-    }
     const design = getDesign(value);
-    if (unlayerRef.current && design) {
+    if (!design) return;
+    if (lastInternalDesign.current === JSON.stringify(design)) return;
+    if (unlayerRef.current) {
       unlayerRef.current.loadDesign(design);
     }
   }, [value]);
@@ -37,7 +35,7 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
     unlayer.addEventListener("design:updated", () => {
       unlayer?.exportHtml((data: { design: object; html: string }) => {
         const { design, html } = data;
-        isInternalChange.current = true;
+        lastInternalDesign.current = JSON.stringify(design);
         onChange({
           target: {
             name,

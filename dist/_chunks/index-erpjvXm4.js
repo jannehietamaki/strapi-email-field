@@ -20,14 +20,12 @@ const getDesign = (val) => {
 const EmailEditorComponent = ({ onChange, value, name }) => {
   const emailEditorRef = react.useRef(null);
   const unlayerRef = react.useRef(null);
-  const isInternalChange = react.useRef(false);
+  const lastInternalDesign = react.useRef(null);
   react.useEffect(() => {
-    if (isInternalChange.current) {
-      isInternalChange.current = false;
-      return;
-    }
     const design = getDesign(value);
-    if (unlayerRef.current && design) {
+    if (!design) return;
+    if (lastInternalDesign.current === JSON.stringify(design)) return;
+    if (unlayerRef.current) {
       unlayerRef.current.loadDesign(design);
     }
   }, [value]);
@@ -36,7 +34,7 @@ const EmailEditorComponent = ({ onChange, value, name }) => {
     unlayer.addEventListener("design:updated", () => {
       unlayer?.exportHtml((data) => {
         const { design: design2, html } = data;
-        isInternalChange.current = true;
+        lastInternalDesign.current = JSON.stringify(design2);
         onChange({
           target: {
             name,

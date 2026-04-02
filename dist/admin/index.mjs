@@ -13,7 +13,7 @@ const index = {
         defaultMessage: "Edit content"
       },
       components: {
-        Input: async () => import("../_chunks/index-B6-v8yX5.mjs")
+        Input: async () => import("../_chunks/index-lU18rmHZ.mjs")
       }
     });
     app.registerPlugin({
