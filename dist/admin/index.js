@@ -14,7 +14,7 @@ const index = {
         defaultMessage: "Edit content"
       },
       components: {
-        Input: async () => Promise.resolve().then(() => require("../_chunks/index-erpjvXm4.js"))
+        Input: async () => Promise.resolve().then(() => require("../_chunks/index-W4uPSnhv.js"))
       }
     });
     app.registerPlugin({

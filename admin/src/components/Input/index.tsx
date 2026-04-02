@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
+import EmailEditor, { EmailEditorProps } from "react-email-editor";
+import { useQueryParams } from "@strapi/strapi/admin";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -8,34 +8,17 @@ const Wrapper = styled.div`
   }
 `;
 
-const getDesign = (val: any) => {
-  if (!val) return null;
-  const d = typeof val === "string" ? JSON.parse(val) : val;
-  return d?.design || null;
-};
-
 const EmailEditorComponent = ({ onChange, value, name }: any) => {
-  const emailEditorRef = useRef<EditorRef>(null);
-  const unlayerRef = useRef<any>(null);
-  const lastInternalDesign = useRef<string | null>(null);
+  const [{ query }] = useQueryParams<{
+    plugins: { i18n: { locale: string } };
+  }>();
 
-  // Handle external value changes (e.g., locale switch)
-  useEffect(() => {
-    const design = getDesign(value);
-    if (!design) return;
-    if (lastInternalDesign.current === JSON.stringify(design)) return;
-    if (unlayerRef.current) {
-      unlayerRef.current.loadDesign(design);
-    }
-  }, [value]);
+  const locale = query?.plugins?.i18n?.locale;
 
   const onReady: EmailEditorProps["onReady"] = (unlayer) => {
-    unlayerRef.current = unlayer;
-
     unlayer.addEventListener("design:updated", () => {
-      unlayer?.exportHtml((data: { design: object; html: string }) => {
+      unlayer.exportHtml((data: { design: object; html: string }) => {
         const { design, html } = data;
-        lastInternalDesign.current = JSON.stringify(design);
         onChange({
           target: {
             name,
@@ -45,8 +28,7 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
       });
     });
 
-    // Initial load
-    const design = getDesign(value);
+    const design = value?.design || null;
     if (design) {
       unlayer.loadDesign(design);
     }
@@ -55,7 +37,7 @@ const EmailEditorComponent = ({ onChange, value, name }: any) => {
   return (
     <Wrapper>
       <EmailEditor
-        ref={emailEditorRef}
+        key={locale}
         onReady={onReady}
         options={{}}
         minHeight={"800px"}
